@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import UniversalInput from "./UniversalInput";
 
@@ -18,7 +17,7 @@ const App = () => {
           type="number"
           disabled={false}
           value={firstValue}
-          onChange={(e) => setFirstValue(e?.target?.value)}
+          onChange={setFirstValue}
           placeholder="Number type"
           style={{ width: "100%" }}
           className="inputItem"
@@ -26,7 +25,7 @@ const App = () => {
         <UniversalInput
           disabled={false}
           value={secondValue}
-          onChange={(e) => setSecondValue(e?.target?.value)}
+          onChange={setSecondValue}
           placeholder="Text type"
           style={{ width: "100%" }}
           className="inputItem"
@@ -35,7 +34,7 @@ const App = () => {
           multiline={true}
           disabled={false}
           value={thirdValue}
-          onChange={(e) => setThirdValue(e?.target?.value)}
+          onChange={setThirdValue}
           placeholder="Text multiline type"
           style={{ width: "100%" }}
           className="inputItem"
@@ -43,7 +42,7 @@ const App = () => {
         <UniversalInput
           disabled={false}
           value={fourValue}
-          onChange={(e) => setFourValue(e?.target?.value)}
+          onChange={setFourValue}
           mask={"111-111"}
           placeholder="With mask"
           style={{
@@ -57,7 +56,7 @@ const App = () => {
         <UniversalInput
           disabled={false}
           value={fiveValue}
-          onChange={(e) => setFiveValue(e?.target?.value)}
+          onChange={setFiveValue}
           options={[
             { value: "first element", label: "first element" },
             { value: "second element", label: "second element" },
