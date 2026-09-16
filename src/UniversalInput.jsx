@@ -99,7 +99,10 @@ class TextInputWithActions extends Component {
 
   setValue = value => {
     this.setState({ value });
-    this.onChangeDebounce(value);
+
+    if (this.props.onChange) {
+      this.props.onChange(value);
+    }
   };
 
   onBlur = e => {
@@ -119,9 +122,11 @@ class TextInputWithActions extends Component {
   };
 
   onChangeNumber = value => {
-    value = this.props.prepareNumber ? this.props.prepareNumber(value) : value;
-    this.setState({ value });
-    this.onChangeDebounce(value);
+    value = this.props.prepareNumber
+      ? this.props.prepareNumber(value)
+      : value;
+
+    this.setValue(value);
   };
 
   onBlurNumber = e => {
@@ -253,7 +258,9 @@ class TextInputWithActions extends Component {
     mask = mask && maskIsValid(mask) ? mask : undefined;
 
     const value =
-      this.state.value || this.state.value === 0 ? this.state.value : "";
+      this.props.value !== undefined
+        ? this.props.value
+        : this.state.value ?? "";
 
     const textInputContainer =
       type === "number" ? "" : styles.textInputContainer;
@@ -312,7 +319,7 @@ class TextInputWithActions extends Component {
           mask={mask}
           {...props}
           placeholder={this.getPlaceHolderMask(mask)}
-          value={this.state.value}
+          value={value}
           style={inputStyle}
           className={inputCN}
           onChange={this.onChangeMasked}

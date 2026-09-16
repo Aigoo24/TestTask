@@ -1,13 +1,33 @@
-import React, { useState } from "react";
+import React from "react";
 import "./App.css";
 import UniversalInput from "./UniversalInput";
+import useLocalStorageState from "./hooks/useLocalStorageState";
 
 const App = () => {
-  const [firstValue, setFirstValue] = useState("");
-  const [secondValue, setSecondValue] = useState("");
-  const [thirdValue, setThirdValue] = useState("");
-  const [fourValue, setFourValue] = useState("");
-  const [fiveValue, setFiveValue] = useState("");
+  const [firstValue, setFirstValue] = useLocalStorageState(
+  "universal-input-number",
+  ""
+  );
+
+  const [secondValue, setSecondValue] = useLocalStorageState(
+    "universal-input-text",
+    ""
+  );
+
+  const [thirdValue, setThirdValue] = useLocalStorageState(
+    "universal-input-multiline",
+    ""
+  );
+
+  const [fourValue, setFourValue] = useLocalStorageState(
+    "universal-input-mask",
+    ""
+  );
+
+  const [fiveValue, setFiveValue] = useLocalStorageState(
+    "universal-input-select",
+    ""
+  );
 
   return (
     <div className="main">
