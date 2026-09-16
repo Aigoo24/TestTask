@@ -79,6 +79,29 @@ class TextInputWithActions extends Component {
     }
   }
 
+  setActionsNode = node => {
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+      this.resizeObserver = null;
+    }
+
+    this.actionsNode = node;
+
+    if (!node) {
+      return;
+    }
+
+    this.recalcActionsWidth();
+
+    if (typeof ResizeObserver !== "undefined") {
+      this.resizeObserver = new ResizeObserver(() => {
+        this.recalcActionsWidth();
+      });
+
+      this.resizeObserver.observe(node);
+    }
+  };
+
   setFocus = () => {
     if (this.props.autoFocus) {
       this.input.current.focus();
@@ -86,13 +109,10 @@ class TextInputWithActions extends Component {
   };
 
   componentDidMount() {
-    this.recalcActionsWidth();
     this.setFocus();
   }
 
   componentDidUpdate(prevProps) {
-    this.recalcActionsWidth();
-
     if (
       prevProps.value !== this.props.value &&
       this.props.value !== this.state.value
@@ -100,6 +120,12 @@ class TextInputWithActions extends Component {
       this.setState({
         value: this.props.valueы
       });
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
     }
   }
 
@@ -452,7 +478,7 @@ class TextInputWithActions extends Component {
           actions.length && (
             <ul
               className={cn(actionsClassName, actionsCN)}
-              ref={node => (this.actionsNode = node)}
+              ref={this.setActionsNode}
               style={actionsStyle}
             >
               {actions.map((node, i) => (
