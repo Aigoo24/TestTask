@@ -27,8 +27,8 @@ const useLocalStorageState = (key, initialValue) => {
   useEffect(() => {
     try {
         if (value === undefined) {
-        localStorage.removeItem(key);
-        return;
+            localStorage.removeItem(key);
+            return;
         }
 
         localStorage.setItem(key, JSON.stringify(value));
@@ -36,9 +36,9 @@ const useLocalStorageState = (key, initialValue) => {
         console.error(
         `Ошибка записи localStorage для ключа "${key}"`,
         error
-        );
+      );
     }
-    }, [key, value]);
+  }, [key, value]);
 
   useEffect(() => {
     const handleStorageChange = (event) => {
