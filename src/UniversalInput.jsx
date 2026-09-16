@@ -12,14 +12,25 @@ import "./styles.css";
 const { TextArea } = Input;
 const { Option, OptGroup } = Select;
 
-class CodeEditor extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: ""
-    };
-  }
+  class CodeEditor extends Component {
+    constructor(props) {
+      super(props);
 
+      this.state = {
+        value: props.value ?? ""
+      };
+    }
+
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.value !== this.props.value &&
+      this.props.value !== this.state.value
+    ) {
+      this.setState({
+        value: this.props.value ?? ""
+      });
+    }
+  }
   onChange = e => {
     const value = e.target.value;
     this.setState({ value });
@@ -141,8 +152,6 @@ class TextInputWithActions extends Component {
   };
 
   setBlur = value => {
-    this.onChangeDebounceCancel();
-
     this.props.onChange && this.props.onChange(value);
 
     if (value !== this.state.oldValue) {
@@ -155,16 +164,6 @@ class TextInputWithActions extends Component {
     });
   };
 
-  onChangeDebounce = value => {
-    this.onChangeDebounceCancel();
-    this.changeTimer = setTimeout(() => {
-      this.props.onChange && this.props.onChange(value);
-    }, 200);
-  };
-
-  onChangeDebounceCancel = () => {
-    clearTimeout(this.changeTimer);
-  };
 
   onKeyDown = e => {
     this.props.onKeyDown && this.props.onKeyDown(e);
@@ -340,7 +339,7 @@ class TextInputWithActions extends Component {
           onChange={this.setValue}
           onBlur={this.setBlur}
           subType={subType}
-          rows={config.get("rows")}
+          rows={config?.get?.("rows") ?? 4}
         />
       );
     } else if (options) {
