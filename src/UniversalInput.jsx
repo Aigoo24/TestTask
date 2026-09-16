@@ -254,7 +254,6 @@ class TextInputWithActions extends Component {
       className,
       style,
       actionsClassName,
-      inputWrapperClassName,
       actions,
       type,
       theme,
@@ -297,7 +296,6 @@ class TextInputWithActions extends Component {
     const { actionsWidth } = this.state;
     let inputStyle = _.assign({}, style);
     const actionsStyle = {};
-    const { onChange, ...numberProps } = this.props;
     actionsCN = "inputWithActions";
 
     if (!actions || actions.length == 0) {
