@@ -47,7 +47,7 @@ const { Option, OptGroup } = Select;
 
     return (
       <TextArea
-        rows={4}
+        rows={this.props.rows ?? 4}
         ref={this.props.inputRef}
         value={value}
         onChange={this.onChange}
@@ -348,7 +348,7 @@ class TextInputWithActions extends Component {
     } else if (script) {
       control = (
         <CodeEditor
-          ref={this.input}
+          inputRef={this.input}
           {...props}
           value={value}
           style={inputStyle}
