@@ -7,7 +7,7 @@ import MaskedInput from "react-input-mask";
 import { formatCharsInput } from "./maskFormat";
 import maskIsValid from "./maskValidator";
 
-import * as styles from "./styles.css";
+import "./styles.css";
 
 const { TextArea } = Input;
 const { Option, OptGroup } = Select;
@@ -224,7 +224,7 @@ class TextInputWithActions extends Component {
       <Option value={o.value} label={o.label}>
         {o.label}
         {o.subLabel && (
-          <span className={styles.optionSubLabel}>{o.subLabel}</span>
+          <span className="optionSubLabel">{o.subLabel}</span>
         )}
       </Option>
     );
@@ -263,15 +263,15 @@ class TextInputWithActions extends Component {
         : this.state.value ?? "";
 
     const textInputContainer =
-      type === "number" ? "" : styles.textInputContainer;
+      type === "number" ? "" : textInputContainer;
 
     const containerCN = cn(wrapperClassName, textInputContainer, {
-      [styles.inputMask]: !multiline && !!mask
+      inputMask: !multiline && !!mask
     });
     let inputCN = cn(className, {
-      [styles.inputReadOnly]: this.props.readOnly,
-      [styles[theme]]: !!theme,
-      [styles.readOnly]: this.props.readOnly
+      inputReadOnly: this.props.readOnly,
+      [theme]: !!theme,
+      readOnly: this.props.readOnly
     });
 
     let actionsCN;
@@ -280,7 +280,7 @@ class TextInputWithActions extends Component {
     let inputStyle = _.assign({}, style);
     const actionsStyle = {};
     const { onChange, ...numberProps } = this.props;
-    actionsCN = styles.inputWithActions;
+    actionsCN = inputWithActions;
 
     if (!actions || actions.length == 0) {
       actionsStyle.visibility = "hidden";
@@ -354,7 +354,7 @@ class TextInputWithActions extends Component {
         }
       });
       if (!valueInOptions && value) {
-        inputCN = cn(inputCN, styles.invalidValue);
+        inputCN = cn(inputCN, invalidValue);
       }
 
       control = (
@@ -402,7 +402,7 @@ class TextInputWithActions extends Component {
             minRows: props.readOnly ? 1 : minRows,
             maxRows: maxRows
           }}
-          className={cn(inputCN, styles.textArea)}
+          className={cn(inputCN, textArea)}
           onChange={this.onChange}
           onBlur={this.onBlur}
           onKeyDown={this.onKeyDown}
@@ -481,8 +481,8 @@ class UniversalInput extends Component {
     if (shouldProcess || inProcess) {
       newActions.push(
         <span
-          className={cn(styles.actionIcon, {
-            [styles.actionIconGray]: inProcess
+          className={cn(actionIcon, {
+            ["actionIconGray"]: inProcess
           })}
           title={inProcess ? "" : "ready to send"}
         >
