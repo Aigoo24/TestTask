@@ -79,14 +79,21 @@ class TextInputWithActions extends Component {
     this.setFocus();
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     this.recalcActionsWidth();
+
+    if (
+      prevProps.value !== this.props.value &&
+      this.props.value !== this.state.value
+    ) {
+      this.setState({
+        value: this.props.valueы
+      });
+    }
   }
 
   onChange = e => {
     const value = e.target.value;
-    this.setState({ value });
-    this.onChangeDebounce(value);
     this.setValue(value);
   };
 
@@ -136,7 +143,7 @@ class TextInputWithActions extends Component {
     if (value !== this.state.oldValue) {
       this.props.onEndEditing && this.props.onEndEditing(value);
     }
-    
+
     this.setState({
       value,
       oldValue: value
