@@ -1,4 +1,3 @@
-import React from "react";
 import "./App.css";
 import UniversalInput from "./UniversalInput";
 import useLocalStorageState from "./hooks/useLocalStorageState";

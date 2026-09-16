@@ -5,7 +5,7 @@ import MaskedInput from "react-input-mask";
 
 import { formatCharsInput } from "./maskFormat";
 import maskIsValid from "./maskValidator";
-
+import PropTypes from "prop-types";
 import "./styles.css";
 
 const { TextArea } = Input;
@@ -57,6 +57,23 @@ const { Option, OptGroup } = Select;
     );
   }
 }
+
+CodeEditor.propTypes = {
+  value: PropTypes.any,
+  onChange: PropTypes.func,
+  onBlur: PropTypes.func,
+  onKeyDown: PropTypes.func,
+  className: PropTypes.string,
+  style: PropTypes.object,
+  rows: PropTypes.number,
+  allowTabs: PropTypes.bool,
+  inputRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({
+      current: PropTypes.any
+    })
+  ])
+};
 
 class TextInputWithActions extends Component {
   constructor(props) {
@@ -117,7 +134,7 @@ class TextInputWithActions extends Component {
       this.props.value !== this.state.value
     ) {
       this.setState({
-        value: this.props.valueы
+        value: this.props.value
       });
     }
   }
@@ -149,7 +166,7 @@ class TextInputWithActions extends Component {
     this.setBlur(value);
   };
 
-  onBlurSelect = e => {
+  onBlurSelect = () => {
     if (this.props.readOnly) {
       return;
     }
@@ -294,6 +311,12 @@ class TextInputWithActions extends Component {
       isAdditional,
       ...otherProps
     } = this.props;
+
+    // Эти props нужны только внутри компонента и не должны попадать в DOM.
+    void onEndEditing;
+    void allowTabs;
+    void t;
+    void isAdditional;
 
     let { mask, options, ...props } = otherProps;
 
@@ -499,6 +522,41 @@ class TextInputWithActions extends Component {
   }
 }
 
+TextInputWithActions.propTypes = {
+  value: PropTypes.any,
+  wrapperClassName: PropTypes.string,
+  className: PropTypes.string,
+  style: PropTypes.object,
+  actionsClassName: PropTypes.string,
+  actions: PropTypes.arrayOf(PropTypes.node),
+  type: PropTypes.string,
+  theme: PropTypes.string,
+  multiline: PropTypes.bool,
+  script: PropTypes.bool,
+  minRows: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.bool
+  ]),
+  maxRows: PropTypes.number,
+  config: PropTypes.shape({
+    get: PropTypes.func
+  }),
+  onChange: PropTypes.func,
+  onEndEditing: PropTypes.func,
+  onKeyDown: PropTypes.func,
+  allowTabs: PropTypes.bool,
+  subType: PropTypes.string,
+  t: PropTypes.any,
+  isAdditional: PropTypes.bool,
+  autoFocus: PropTypes.bool,
+  readOnly: PropTypes.bool,
+  prepareNumber: PropTypes.func,
+  formatter: PropTypes.func,
+  mask: PropTypes.string,
+  options: PropTypes.array,
+  children: PropTypes.node
+};
+
 class UniversalInput extends Component {
   state = {
     shouldProcess: false
@@ -523,6 +581,12 @@ class UniversalInput extends Component {
       t,
       ...props
     } = this.props;
+
+    // Не передаём служебные props дальше в TextInputWithActions.
+    void eventable;
+    void onEndEditing;
+    void t;
+    
     let { shouldProcess } = this.state;
     const inProcess = updateProcess && updateProcess.get("inProcess");
 
@@ -530,7 +594,7 @@ class UniversalInput extends Component {
     if (shouldProcess || inProcess) {
       newActions.push(
         <span
-          className={cn(actionIcon, {
+          className={cn("actionIcon", {
             ["actionIconGray"]: inProcess
           })}
           title={inProcess ? "" : "ready to send"}
@@ -548,5 +612,16 @@ class UniversalInput extends Component {
     );
   }
 }
+
+UniversalInput.propTypes = {
+  onChange: PropTypes.func,
+  onEndEditing: PropTypes.func,
+  eventable: PropTypes.bool,
+  actions: PropTypes.arrayOf(PropTypes.node),
+  updateProcess: PropTypes.shape({
+    get: PropTypes.func
+  }),
+  t: PropTypes.any
+};
 
 export default UniversalInput
