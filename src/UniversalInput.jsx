@@ -1,4 +1,3 @@
-import _ from "lodash";
 import React, { Component } from "react";
 import cn from "classnames";
 import { Input, InputNumber, Select } from "antd";
@@ -236,7 +235,7 @@ class TextInputWithActions extends Component {
   };
 
   getPlaceHolderMask = mask => {
-    const charsEditableMask = _.keys(formatCharsInput).join("");
+    const charsEditableMask = Object.keys(formatCharsInput).join("");
     let placeholder = "";
     let shielding = false;
 
@@ -320,7 +319,7 @@ class TextInputWithActions extends Component {
     let actionsCN;
 
     const { actionsWidth } = this.state;
-    let inputStyle = _.assign({}, style);
+    let inputStyle = { ...(style || {}) };
     const actionsStyle = {};
     actionsCN = "inputWithActions";
 
@@ -386,14 +385,20 @@ class TextInputWithActions extends Component {
         />
       );
     } else if (options) {
-      inputStyle = _.assign(inputStyle, { width: "100%" });
-      const valueInOptions = _.some(options, o => {
+      inputStyle = {...inputStyle,width: "100%"};
+      const valueInOptions = options.some(o => {
         if (o.value === value) {
           return true;
         }
-        if (o.options && _.some(o.options, o => o.value === value)) {
+
+        if (
+          Array.isArray(o.options) &&
+          o.options.some(option => option.value === value)
+        ) {
           return true;
         }
+
+        return false;
       });
       if (!valueInOptions && value) {
         inputCN = cn(inputCN, "invalidValue");
@@ -418,7 +423,7 @@ class TextInputWithActions extends Component {
           }
         >
           {options.map(o => {
-            if (_.isArray(o.options)) {
+            if (Array.isArray(o.options)) {
               return (
                 <OptGroup key={o.value} label={o.label}>
                   {o.options.map(o => {
