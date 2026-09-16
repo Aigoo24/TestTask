@@ -103,7 +103,7 @@ class TextInputWithActions extends Component {
 
   setFocus = () => {
     if (this.props.autoFocus) {
-      this.input.current.focus();
+      this.input.current?.focus?.();
     }
   };
 
@@ -334,7 +334,9 @@ class TextInputWithActions extends Component {
       if (this.props.readOnly) {
         control = (
           <span className={inputCN}>
-            {this.props.formatter && this.props.formatter(value)}
+            {this.props.formatter
+              ? this.props.formatter(value)
+              : value}
           </span>
         );
       } else {
