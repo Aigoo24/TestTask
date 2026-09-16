@@ -173,9 +173,28 @@ class TextInputWithActions extends Component {
     }
 
     if (e.key === "Tab" && !e.shiftKey) {
+      const target = e.currentTarget;
+      const start = target.selectionStart;
+      const end = target.selectionEnd;
+
+      if (typeof start !== "number" || typeof end !== "number") {
+        return;
+      }
+
       e.preventDefault();
-      document.execCommand("insertText", false, "\t");
-      return false;
+
+      const value = target.value;
+      const newValue =
+        value.slice(0, start) +
+        "\t" +
+        value.slice(end);
+
+      this.setValue(newValue);
+
+      requestAnimationFrame(() => {
+        target.selectionStart = start + 1;
+        target.selectionEnd = start + 1;
+      });
     }
   };
 
