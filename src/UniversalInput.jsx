@@ -263,10 +263,10 @@ class TextInputWithActions extends Component {
         : this.state.value ?? "";
 
     const textInputContainer =
-      type === "number" ? "" : textInputContainer;
+      type === "number" ? "" : "textInputContainer";
 
     const containerCN = cn(wrapperClassName, textInputContainer, {
-      inputMask: !multiline && !!mask
+      inputMas: !multiline && !!mask
     });
     let inputCN = cn(className, {
       inputReadOnly: this.props.readOnly,
@@ -280,7 +280,7 @@ class TextInputWithActions extends Component {
     let inputStyle = _.assign({}, style);
     const actionsStyle = {};
     const { onChange, ...numberProps } = this.props;
-    actionsCN = inputWithActions;
+    actionsCN = "inputWithActions";
 
     if (!actions || actions.length == 0) {
       actionsStyle.visibility = "hidden";
@@ -354,7 +354,7 @@ class TextInputWithActions extends Component {
         }
       });
       if (!valueInOptions && value) {
-        inputCN = cn(inputCN, invalidValue);
+        inputCN = cn(inputCN, "invalidValue");
       }
 
       control = (
@@ -402,7 +402,7 @@ class TextInputWithActions extends Component {
             minRows: props.readOnly ? 1 : minRows,
             maxRows: maxRows
           }}
-          className={cn(inputCN, textArea)}
+          className={cn(inputCN, "textArea")}
           onChange={this.onChange}
           onBlur={this.onBlur}
           onKeyDown={this.onKeyDown}
