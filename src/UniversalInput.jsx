@@ -129,15 +129,18 @@ class TextInputWithActions extends Component {
   };
 
   setBlur = value => {
-    this.setState({ value });
     this.onChangeDebounceCancel();
+
     this.props.onChange && this.props.onChange(value);
+
     if (value !== this.state.oldValue) {
       this.props.onEndEditing && this.props.onEndEditing(value);
-    } else if (_.isNumber(value) && value !== this.state.oldValue) {
-      this.props.onEndEditing && this.props.onEndEditing(value);
     }
-    this.state.oldValue = value;
+    
+    this.setState({
+      value,
+      oldValue: value
+    });
   };
 
   onChangeDebounce = value => {
