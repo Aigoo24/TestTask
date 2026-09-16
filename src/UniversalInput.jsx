@@ -51,6 +51,7 @@ const { Option, OptGroup } = Select;
         value={value}
         onChange={this.onChange}
         onBlur={this.onBlur}
+        onKeyDown={this.props.onKeyDown}
         className={className}
         style={style}
       />
@@ -79,7 +80,11 @@ class TextInputWithActions extends Component {
   constructor(props) {
     super(props);
     this.input = React.createRef();
-    this.state = { actionsWidth: 0, value: this.props.value, oldValue: "" };
+    this.state = {
+      actionsWidth: 0,
+      value: props.value ?? "",
+      oldValue: props.value ?? ""
+    };
   }
 
   recalcActionsWidth() {
@@ -182,20 +187,15 @@ class TextInputWithActions extends Component {
     this.setValue(value);
   };
 
-  onBlurNumber = e => {
+  onBlurNumber = () => {
     if (this.props.readOnly) {
       return;
     }
-    let value = e.target.value;
-    value = this.props.prepareNumber ? this.props.prepareNumber(value) : value;
-    if (value || this.state.oldValue !== "") {
-      this.setBlur(value);
-    }
+
+    this.setBlur(this.state.value ?? "");
   };
 
   setBlur = value => {
-    this.props.onChange && this.props.onChange(value);
-
     if (value !== this.state.oldValue) {
       this.props.onEndEditing && this.props.onEndEditing(value);
     }
@@ -244,7 +244,7 @@ class TextInputWithActions extends Component {
     let { mask } = this.props;
     const value = e.target.value;
 
-    if (value === mask.replace(/[^-]/g, "_")) {
+    if (value === this.getPlaceHolderMask(mask)) {
       this.setValue("");
     } else {
       this.setValue(value);
@@ -281,7 +281,7 @@ class TextInputWithActions extends Component {
 
   renderSelectOption = o => {
     return (
-      <Option value={o.value} label={o.label}>
+      <Option key={o.value} value={o.value} label={o.label}>
         {o.label}
         {o.subLabel && (
           <span className="optionSubLabel">{o.subLabel}</span>
@@ -293,6 +293,7 @@ class TextInputWithActions extends Component {
   render() {
     const {
       wrapperClassName,
+      inputWrapperClassName,
       className,
       style,
       actionsClassName,
@@ -317,6 +318,7 @@ class TextInputWithActions extends Component {
     void allowTabs;
     void t;
     void isAdditional;
+    void inputWrapperClassName;
 
     let { mask, options, ...props } = otherProps;
 
@@ -331,7 +333,7 @@ class TextInputWithActions extends Component {
       type === "number" ? "" : "textInputContainer";
 
     const containerCN = cn(wrapperClassName, textInputContainer, {
-      inputMas: !multiline && !!mask
+      inputMask: !multiline && !!mask
     });
     let inputCN = cn(className, {
       inputReadOnly: this.props.readOnly,
@@ -405,6 +407,7 @@ class TextInputWithActions extends Component {
           className={inputCN}
           onChange={this.setValue}
           onBlur={this.setBlur}
+          onKeyDown={this.onKeyDown}
           subType={subType}
           rows={config?.get?.("rows") ?? 4}
         />
@@ -450,7 +453,7 @@ class TextInputWithActions extends Component {
           {options.map(o => {
             if (Array.isArray(o.options)) {
               return (
-                <OptGroup key={o.value} label={o.label}>
+                <OptGroup key={o.value ?? o.label} label={o.label}>
                   {o.options.map(o => {
                     return this.renderSelectOption(o);
                   })}
@@ -491,7 +494,6 @@ class TextInputWithActions extends Component {
         <Input
           ref={this.input}
           {...props}
-          config={config}
           value={value}
           style={inputStyle}
           className={inputCN}
@@ -525,6 +527,7 @@ class TextInputWithActions extends Component {
 TextInputWithActions.propTypes = {
   value: PropTypes.any,
   wrapperClassName: PropTypes.string,
+  inputWrapperClassName: PropTypes.string,
   className: PropTypes.string,
   style: PropTypes.object,
   actionsClassName: PropTypes.string,
