@@ -26,18 +26,26 @@ const useLocalStorageState = (key, initialValue) => {
 
   useEffect(() => {
     try {
-      localStorage.setItem(key, JSON.stringify(value));
+        if (value === undefined) {
+        localStorage.removeItem(key);
+        return;
+        }
+
+        localStorage.setItem(key, JSON.stringify(value));
     } catch (error) {
-      console.error(
+        console.error(
         `Ошибка записи localStorage для ключа "${key}"`,
         error
-      );
+        );
     }
-  }, [key, value]);
+    }, [key, value]);
 
   useEffect(() => {
     const handleStorageChange = (event) => {
-      if (event.key !== key) {
+      if (
+        event.storageArea !== localStorage ||
+        event.key !== key
+      ) {
         return;
       }
 
